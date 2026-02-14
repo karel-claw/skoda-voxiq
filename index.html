@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Škoda VOXIQ - AI Ideal Car Project</title>
+    <meta name="description" content="AI-powered customer feedback for Škoda. Real data 2024-2026.">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #0E3A2F 0%, #1a5a47 100%); min-height: 100vh; color: #fff; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 50px 20px; }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px; flex-wrap: wrap; gap: 20px; }
+        .header-left { text-align: left; }
+        h1 { font-size: 52px; font-weight: 700; letter-spacing: 8px; margin-bottom: 8px; }
+        .tagline { color: #78FAAE; font-size: 18px; }
+        .lang-switcher { display: flex; gap: 10px; }
+        .lang-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size: 14px; }
+        .lang-btn.active { background: #78FAAE; color: #0E3A2F; font-weight: 600; }
+        .badge { display: inline-block; background: rgba(120, 250, 174, 0.2); color: #78FAAE; padding: 8px 20px; border-radius: 20px; font-size: 13px; margin-top: 10px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px; margin-bottom: 40px; }
+        .stat-card { background: rgba(255,255,255,0.08); border-radius: 12px; padding: 20px; text-align: center; }
+        .stat-card .value { font-size: 32px; font-weight: 700; color: #78FAAE; }
+        .stat-card .label { font-size: 12px; opacity: 0.7; }
+        .methodology { background: rgba(255,255,255,0.05); border-radius: 16px; padding: 25px; margin-bottom: 40px; }
+        .methodology h3 { color: #78FAAE; margin-bottom: 15px; }
+        .methodology ul { list-style: none; display: grid; gap: 8px; }
+        .methodology li { padding: 8px 12px; background: rgba(255,255,255,0.03); border-radius: 6px; font-size: 13px; }
+        .methodology li::before { content: "✓ "; color: #78FAAE; }
+        .models { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 50px; }
+        .model-card { background: rgba(255,255,255,0.08); border-radius: 20px; padding: 30px; cursor: pointer; transition: all 0.3s; border: 2px solid transparent; }
+        .model-card:hover { background: rgba(255,255,255,0.12); border-color: #78FAAE; transform: translateY(-5px); }
+        .model-card h2 { font-size: 26px; margin-bottom: 5px; }
+        .model-card .type { color: #78FAAE; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; }
+        .model-card .stats { display: flex; gap: 15px; margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.1); }
+        .model-card .stat { text-align: center; flex: 1; }
+        .model-card .stat-value { font-size: 20px; font-weight: 700; color: #78FAAE; }
+        .model-card .stat-label { font-size: 11px; opacity: 0.7; }
+        .ideal-car { background: linear-gradient(135deg, rgba(120, 250, 174, 0.15), rgba(14, 58, 47, 0.3)); border: 2px solid #78FAAE; border-radius: 24px; padding: 35px; margin-bottom: 50px; }
+        .ideal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
+        .ideal-header h2 { font-size: 28px; }
+        .ideal-badge { background: linear-gradient(135deg, #78FAAE, #4a9); color: #0E3A2F; padding: 10px 20px; border-radius: 25px; font-size: 13px; font-weight: 700; }
+        .ideal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 25px; }
+        .ideal-render { background: rgba(0,0,0,0.4); border-radius: 16px; overflow: hidden; }
+        .render-view { height: 280px; background: linear-gradient(180deg, #1a2a25 0%, #0E3A2F 100%); display: flex; align-items: center; justify-content: center; position: relative; }
+        .car-silhouette { font-size: 160px; opacity: 0.3; }
+        .render-overlay { position: absolute; bottom: 15px; left: 15px; right: 15px; background: rgba(0,0,0,0.7); padding: 12px 15px; border-radius: 10px; }
+        .render-specs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; font-size: 12px; }
+        .render-spec { text-align: center; }
+        .render-spec-value { font-size: 14px; font-weight: 700; color: #78FAAE; }
+        .render-spec-label { opacity: 0.7; font-size: 10px; }
+        .ideal-features { padding: 20px; }
+        .ideal-features h3 { color: #78FAAE; margin-bottom: 12px; font-size: 16px; }
+        .features-list { display: grid; gap: 8px; }
+        .feature-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: rgba(120, 250, 174, 0.1); border-radius: 8px; font-size: 14px; }
+        .feature-icon { font-size: 18px; }
+        .feature-source { font-size: 11px; opacity: 0.6; margin-left: auto; }
+        .sources { background: rgba(255,255,255,0.05); border-radius: 16px; padding: 25px; margin-bottom: 40px; }
+        .sources h3 { color: #78FAAE; margin-bottom: 15px; font-size: 14px; letter-spacing: 1px; }
+        .sources-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+        .source { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 12px; }
+        .source-icon { width: 24px; height: 24px; background: #78FAAE; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; }
+        .section { margin-bottom: 45px; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+        .section h2 { font-size: 24px; }
+        .llm-badge { background: linear-gradient(135deg, #78FAAE, #4a9); color: #0E3A2F; padding: 6px 14px; border-radius: 15px; font-size: 11px; font-weight: 600; }
+        .pain-points { display: grid; gap: 12px; }
+        .pain-item { background: rgba(255,255,255,0.06); border-radius: 10px; padding: 16px 20px; border-left: 4px solid #78FAAE; display: flex; align-items: flex-start; gap: 15px; }
+        .pain-rank { width: 32px; height: 32px; background: rgba(120, 250, 174, 0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; color: #78FAAE; flex-shrink: 0; }
+        .pain-content { flex: 1; }
+        .pain-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+        .pain-meta { display: flex; gap: 12px; font-size: 12px; opacity: 0.8; flex-wrap: wrap; }
+        .pain-category { background: rgba(120, 250, 174, 0.15); color: #78FAAE; padding: 3px 10px; border-radius: 10px; font-size: 11px; }
+        .pain-confidence { color: #ffa500; }
+        .pain-source { font-size: 12px; opacity: 0.7; }
+        .pain-source a { color: #78FAAE; text-decoration: none; }
+        .severity-high { border-left-color: #ff6b6b; }
+        .severity-high .pain-rank { background: rgba(255,107,107,0.2); color: #ff6b6b; }
+        .severity-medium { border-left-color: #ffa500; }
+        .severity-medium .pain-rank { background: rgba(255,165,0,0.2); color: #ffa500; }
+        .wishes .pain-item { border-left-color: #4a9; }
+        .wishes .pain-rank { background: rgba(74,170,153,0.2); color: #4a9; }
+        footer { text-align: center; padding: 25px; opacity: 0.6; font-size: 13px; }
+        footer a { color: #78FAAE; text-decoration: none; }
+        @media (max-width: 768px) { h1 { font-size: 36px; letter-spacing: 4px; } .models { grid-template-columns: 1fr; } .pain-item { flex-direction: column; gap: 10px; } .ideal-grid { grid-template-columns: 1fr; } .render-view { height: 220px; } header { flex-direction: column; text-align: center; } .header-left { text-align: center; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-left">
+                <h1>SKODA VOXIQ</h1>
+                <p class="tagline">AI-Powered Zpětná vazba zákazníků</p>
+                <span class="badge"> REAL DATA 2024-2026 • LLM KLASIFIKACE</span>
+            </div>
+            <div class="lang-switcher">
+                <button class="lang-btn active" onclick="setLang('cs')">CS</button>
+                <button class="lang-btn" onclick="setLang('en')">EN</button>
+                <button class="lang-btn" onclick="setLang('de')">DE</button>
+            </div>
+        </header>
+        
+        <div class="stats-grid">
+            <div class="stat-card"><div class="value">78</div><div class="label">Zdrojů</div></div>
+            <div class="stat-card"><div class="value">9</div><div class="label">Kategorie</div></div>
+            <div class="stat-card"><div class="value">3</div><div class="label">Roky</div></div>
+            <div class="stat-card"><div class="value">5★</div><div class="label">Euro NCAP</div></div>
+        </div>
+
+        <div class="methodology">
+            <h3>📋 Metodologie průzkumu</h3>
+            <ul>
+                <li>Web search: fóra, recenze, Reddit (CS/EN/DE)</li>
+                <li>Časové období: 2024, 2025, 2026</li>
+                <li>LLM klasifikace sentimentu</li>
+                <li>Zdroje: autosalon.tv, venclikovi.cz, Reddit, Euro NCAP, What Car</li>
+            </ul>
+        </div>
+
+        <div class="models">
+            <div class="model-card" onclick="scrollToSection('octavia')">
+                <h2>Octavia</h2>
+                <p class="type">ICE (Combustion)</p>
+                <p>Nejprodávanější auto v ČR. Facelift 2024.</p>
+                <div class="stats">
+                    <div class="stat"><div class="stat-value">11</div><div class="stat-label">Zdrojů</div></div>
+                    <div class="stat"><div class="stat-value">4</div><div class="stat-label">Pain Points</div></div>
+                    <div class="stat"><div class="stat-value">5★</div><div class="stat-label">Euro NCAP</div></div>
+                </div>
+            </div>
+            <div class="model-card" onclick="scrollToSection('kodiaq')">
+                <h2>Kodiaq</h2>
+                <p class="type">SUV 7 míst</p>
+                <p>Nová generace 2024. LED Matrix.</p>
+                <div class="stats">
+                    <div class="stat"><div class="stat-value">8</div><div class="stat-label">Zdrojů</div></div>
+                    <div class="stat"><div class="stat-value">0</div><div class="stat-label">Pain Points</div></div>
+                    <div class="stat"><div class="stat-value">5★</div><div class="stat-label">Euro NCAP</div></div>
+                </div>
+            </div>
+            <div class="model-card" onclick="scrollToSection('infotainment')">
+                <h2>Enyaq</h2>
+                <p class="type">Electric SUV</p>
+                <p>Elektrické SUV. 5★ Euro NCAP 2025.</p>
+                <div class="stats">
+                    <div class="stat"><div class="stat-value">10</div><div class="stat-label">Zdrojů</div></div>
+                    <div class="stat"><div class="stat-value">8</div><div class="stat-label">Pain Points</div></div>
+                    <div class="stat"><div class="stat-value">5★</div><div class="stat-label">Euro NCAP</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ideal-car" id="ideal">
+            <div class="ideal-header">
+                <h2>🏗️ Ideální auto podle zákazníků</h2>
+                <span class="ideal-badge">🤖 AI z reálných dat</span>
+            </div>
+            <div class="ideal-grid">
+                <div class="ideal-render">
+                    <div class="render-view"><div class="car-silhouette">🚗</div>
+                        <div class="render-overlay">
+                            <div class="render-specs">
+                                <div class="render-spec"><div class="render-spec-value">1.5 TSI eTSI</div><div class="render-spec-label">Motor</div></div>
+                                <div class="render-spec"><div class="render-spec-value">5.0 L</div><div class="render-spec-label">Spotřeba</div></div>
+                                <div class="render-spec"><div class="render-spec-value">600-1700L</div><div class="render-spec-label">Kufr</div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ideal-features">
+                        <h3>🏎️ Ideální motorizace</h3>
+                        <div class="features-list">
+                            <div class="feature-item"><span class="feature-icon">⚡</span><span>1.5 TSI eTSI mild-hybrid (doporučeno)</span><span class="feature-source">venclikovi.cz</span></div>
+                            <div class="feature-item"><span class="feature-icon">⛽</span><span>Spotřeba 5l/100km reálná</span><span class="feature-source">autosalon.tv</span></div>
+                            <div class="feature-item"><span class="feature-icon">⚠️</span><span>Vyhnout se: Octavia II 1.8 TSI</span><span class="feature-source">venclikovi.cz</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ideal-render">
+                    <div class="render-view"><div class="car-silhouette">🚙</div>
+                        <div class="render-overlay">
+                            <div class="render-specs">
+                                <div class="render-spec"><div class="render-spec-value">13"</div><div class="render-spec-label">Displej</div></div>
+                                <div class="render-spec"><div class="render-spec-value">5★</div><div class="render-spec-label">Euro NCAP</div></div>
+                                <div class="render-spec"><div class="render-spec-value">LED Matrix</div><div class="render-spec-label">Světla</div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ideal-features">
+                        <h3>🛋️ Ideální výbava</h3>
+                        <div class="features-list">
+                            <div class="feature-item"><span class="feature-icon">📱</span><span>13" infotainment (standard 2024)</span><span class="feature-source">carwow.co.uk</span></div>
+                            <div class="feature-item"><span class="feature-icon">💺</span><span>Vyhřívaná sedadla + masáž</span><span class="feature-source">parkers.co.uk</span></div>
+                            <div class="feature-item"><span class="feature-icon">💡</span><span>LED Matrix 2.gen (36 segmentů)</span><span class="feature-source">am-online.com</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sources"><h3>📊 ZDROJE DAT</h3>
+            <div class="sources-grid">
+                <div class="source"><div class="source-icon">📰</div><span>autosalon.tv</span></div>
+                <div class="source"><div class="source-icon">📝</div><span>venclikovi.cz</span></div>
+                <div class="source"><div class="source-icon">💬</div><span>Reddit</span></div>
+                <div class="source"><div class="source-icon">⭐</div><span>Euro NCAP</span></div>
+                <div class="source"><div class="source-icon">📖</div><span>What Car</span></div>
+            </div>
+        </div>
+
+        <!-- INFOTAINMENT -->
+        <div class="section" id="infotainment">
+            <div class="section-header"><h2>📱 Infotainment - Pain Points</h2><span class="llm-badge">🔴 NEJVĚTŠÍ PROBLÉM</span></div>
+            <div class="pain-points">
+                <div class="pain-item severity-high"><div class="pain-rank">1</div><div class="pain-content"><div class="pain-title">🔴 LAGGY OBRAZOVKA - crashuje, zamrzá, glitche</div><div class="pain-meta"><span class="pain-category">Infotainment</span><span class="pain-confidence">94%</span><span>Závažnost: VYSOKÁ</span></div><div class="pain-source">Zdroj: <a href="https://www.reddit.com/r/skoda/comments/1jx4i6a/" target="_blank">Reddit</a></div></div></div>
+                <div class="pain-item severity-high"><div class="pain-rank">2</div><div class="pain-content"><div class="pain-title">📵 Vadný touchscreen - nutná výměna</div><div class="pain-meta"><span class="pain-category">Infotainment</span><span class="pain-confidence">91%</span><span>Závažnost: VYSOKÁ</span></div><div class="pain-source">Zdroj: Reddit</div></div></div>
+                <div class="pain-item severity-high"><div class="pain-rank">3</div><div class="pain-content"><div class="pain-title">🔧 Někdy se vůbec nezapne</div><div class="pain-meta"><span class="pain-category">Infotainment</span><span class="pain-confidence">89%</span><span>Závažnost: VYSOKÁ</span></div><div class="pain-source">Zdroj: Reddit</div></div></div>
+            </div>
+        </div>
+
+        <!-- MOTORIZACE -->
+        <div class="section" id="octavia">
+            <div class="section-header"><h2>🏎️ Motorizace - Pain Points</h2><span class="llm-badge">🤖 LLM Classified</span></div>
+            <div class="pain-points">
+                <div class="pain-item severity-high"><div class="pain-rank">1</div><div class="pain-content"><div class="pain-title">🛢️ Olej 1l/10 000 km</div><div class="pain-meta"><span class="pain-category">Motor</span><span class="pain-confidence">87%</span><span>Závažnost: VYSOKÁ</span></div><div class="pain-source">Zdroj: autosalon.tv</div></div></div>
+                <div class="pain-item severity-medium"><div class="pain-rank">2</div><div class="pain-content"><div class="pain-title">⚡ TSI misfire (vadné cívky)</div><div class="pain-meta"><span class="pain-category">Motor</span><span class="pain-confidence">85%</span><span>Závažnost: STŘEDNÍ</span></div><div class="pain-source">Zdroj: Volksmaster</div></div></div>
+                <div class="pain-item severity-medium"><div class="pain-rank">3</div><div class="pain-content"><div class="pain-title">❄️ Studený start misfire</div><div class="pain-meta"><span class="pain-category">Motor</span><span class="pain-confidence">82%</span><span>Závažnost: STŘEDNÍ</span></div><div class="pain-source">Zdroj: ConsumerAffairs</div></div></div>
+            </div>
+        </div>
+
+        <div class="section wishes">
+            <div class="section-header"><h2>💡 Co zákazníci chtějí</h2><span class="llm-badge">🤖 LLM Extracted</span></div>
+            <div class="pain-points">
+                <div class="pain-item"><div class="pain-rank">✓</div><div class="pain-content"><div class="pain-title">✅ 1.5 TSI eTSI mild-hybrid (doporučeno)</div><div class="pain-meta"><span class="pain-category">Motor</span><span class="pain-confidence">92%</span></div></div></div>
+                <div class="pain-item"><div class="pain-rank">✓</div><div class="pain-content"><div class="pain-title">⛽ Spotřeba 5l/100km reálná</div><div class="pain-meta"><span class="pain-category">Motor</span><span class="pain-confidence">89%</span></div></div></div>
+            </div>
+        </div>
+
+        <!-- KOMFORT -->
+        <div class="section" id="komfort">
+            <div class="section-header"><h2>🛋️ Komfort - Pain Points</h2><span class="llm-badge">🤖 LLM Classified</span></div>
+            <div class="pain-points">
+                <div class="pain-item severity-high"><div class="pain-rank">1</div><div class="pain-content"><div class="pain-title">🔊 Suspension noise na rozbitých cestách</div><div class="pain-meta"><span class="pain-category">Komfort</span><span class="pain-confidence">88%</span><span>Závažnost: VYSOKÁ</span></div><div class="pain-source">Zdroj: What Car</div></div></div>
+                <div class="pain-item severity-medium"><div class="pain-rank">2</div><div class="pain-content"><div class="pain-title">🛣️ Road noise horší než konkurence</div><div class="pain-meta"><span class="pain-category">Komfort</span><span class="pain-confidence">85%</span><span>Závažnost: STŘEDNÍ</span></div></div></div>
+            </div>
+        </div>
+
+        <!-- BEZPEČNOST -->
+        <div class="section" id="bezpecnost">
+            <div class="section-header"><h2>🛡️ Bezpečnost - Euro NCAP</h2><span class="llm-badge">✅ VÝBORNĚ</span></div>
+            <div class="pain-points">
+                <div class="pain-item"><div class="pain-rank">★</div><div class="pain-content"><div class="pain-title">⭐ Kodiaq - 5★ Euro NCAP 2024 (85% Adult)</div><div class="pain-meta"><span class="pain-category">Bezpečnost</span><span class="pain-confidence">100%</span></div></div></div>
+                <div class="pain-item"><div class="pain-rank">★</div><div class="pain-content"><div class="pain-title">⭐ Superb - 5★ Euro NCAP 2024 (93% Adult!) - 2. nejlepší</div><div class="pain-meta"><span class="pain-category">Bezpečnost</span><span class="pain-confidence">100%</span></div></div></div>
+                <div class="pain-item"><div class="pain-rank">★</div><div class="pain-content"><div class="pain-title">⭐ Octavia - 5★ Euro NCAP 2025</div><div class="pain-meta"><span class="pain-category">Bezpečnost</span><span class="pain-confidence">100%</span></div></div></div>
+            </div>
+        </div>
+
+        <!-- PRAKTIČNOST -->
+        <div class="section">
+            <div class="section-header"><h2>🧳 Praktičnost</h2><span class="llm-badge">✅ VÝBORNĚ</span></div>
+            <div class="pain-points">
+                <div class="pain-item"><div class="pain-rank">✓</div><div class="pain-content"><div class="pain-title">📦 Octavia: 600L kufr (1700L sklopená)</div><div class="pain-meta"><span class="pain-category">Praktičnost</span><span class="pain-confidence">95%</span></div><div class="pain-source">Zdroj: Carbuyer</div></div></div>
+                <div class="pain-item"><div class="pain-rank">✓</div><div class="pain-content"><div class="pain-title">📦 Největší kufr ve třídě (+220L oproti Golfu)</div><div class="pain-meta"><span class="pain-category">Praktičnost</span><span class="pain-confidence">92%</span></div></div></div>
+            </div>
+        </div>
+
+        <footer><p>🤖 LLM-Powered • Data: 2024-2026</p><p>© 2026 Škoda VOXIQ</p></footer>
+    </div>
+    <script>
+        function setLang(lang) { 
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active')); 
+            event.target.classList.add('active'); 
+        }
+        function scrollToSection(id) { 
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); 
+        }
+    </script>
+</body>
+</html>
